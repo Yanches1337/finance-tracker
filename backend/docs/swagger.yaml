@@ -1,0 +1,790 @@
+basePath: /api/v1
+definitions:
+  domain.Category:
+    properties:
+      color:
+        type: string
+      icon:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/domain.TransactionType'
+      user_id:
+        type: integer
+    type: object
+  domain.CategoryStats:
+    properties:
+      category_id:
+        type: integer
+      category_name:
+        type: string
+      total:
+        type: number
+    type: object
+  domain.CreateCategoryRequest:
+    properties:
+      color:
+        type: string
+      icon:
+        type: string
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+      type:
+        $ref: '#/definitions/domain.TransactionType'
+    required:
+    - name
+    - type
+    type: object
+  domain.CreateGoalRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      target_amount:
+        type: integer
+      target_date:
+        type: string
+    required:
+    - name
+    - target_amount
+    type: object
+  domain.CreateTransactionRequest:
+    properties:
+      amount:
+        type: number
+      category_id:
+        type: integer
+      date:
+        type: string
+      description:
+        type: string
+      type:
+        $ref: '#/definitions/domain.TransactionType'
+    required:
+    - amount
+    - date
+    - type
+    type: object
+  domain.Dashboard:
+    properties:
+      balance:
+        type: number
+      expenses_by_category:
+        items:
+          $ref: '#/definitions/domain.CategoryStats'
+        type: array
+      income_by_category:
+        items:
+          $ref: '#/definitions/domain.CategoryStats'
+        type: array
+      total_expense:
+        type: number
+      total_income:
+        type: number
+    type: object
+  domain.GenerateReportRequest:
+    properties:
+      format:
+        $ref: '#/definitions/domain.ReportFormat'
+      from_date:
+        type: string
+      to_date:
+        type: string
+    type: object
+  domain.Goal:
+    properties:
+      created_at:
+        type: string
+      current_amount:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      is_completed:
+        type: boolean
+      name:
+        type: string
+      target_amount:
+        type: integer
+      target_date:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  domain.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  domain.RegisterRequest:
+    properties:
+      email:
+        type: string
+      name:
+        minLength: 2
+        type: string
+      password:
+        minLength: 8
+        type: string
+    required:
+    - email
+    - name
+    - password
+    type: object
+  domain.Report:
+    properties:
+      created_at:
+        type: string
+      file_name:
+        type: string
+      file_path:
+        type: string
+      format:
+        $ref: '#/definitions/domain.ReportFormat'
+      from_date:
+        type: string
+      id:
+        type: integer
+      to_date:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  domain.ReportFormat:
+    enum:
+    - csv
+    - json
+    - xlsx
+    - pdf
+    type: string
+    x-enum-varnames:
+    - ReportFormatCSV
+    - ReportFormatJSON
+    - ReportFormatXLSX
+    - ReportFormatPDF
+  domain.Transaction:
+    properties:
+      amount:
+        type: number
+      category_id:
+        type: integer
+      created_at:
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      type:
+        $ref: '#/definitions/domain.TransactionType'
+      user_id:
+        type: integer
+    type: object
+  domain.TransactionType:
+    enum:
+    - income
+    - expense
+    type: string
+    x-enum-varnames:
+    - Income
+    - Expense
+  domain.UpdateCategoryRequest:
+    properties:
+      color:
+        type: string
+      icon:
+        type: string
+      id:
+        type: integer
+      name:
+        maxLength: 100
+        minLength: 1
+        type: string
+      type:
+        $ref: '#/definitions/domain.TransactionType'
+    required:
+    - id
+    - name
+    - type
+    type: object
+  domain.UpdateGoalRequest:
+    properties:
+      current_amount:
+        type: integer
+      description:
+        type: string
+      is_completed:
+        type: boolean
+      name:
+        type: string
+      target_amount:
+        type: integer
+      target_date:
+        type: string
+    type: object
+  domain.UpdateTransactionRequest:
+    properties:
+      amount:
+        type: number
+      category_id:
+        type: integer
+      date:
+        type: string
+      description:
+        type: string
+      type:
+        $ref: '#/definitions/domain.TransactionType'
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: API for personal finance tracking
+  title: Finance Tracker API
+  version: "1.0"
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Login user
+      tags:
+      - auth
+  /auth/logout:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Logout user
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Refresh tokens
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Register request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register user
+      tags:
+      - auth
+  /protected/categories:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create category
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CreateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Category'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create category
+      tags:
+      - categories
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Update category
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdateCategoryRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update category
+      tags:
+      - categories
+  /protected/categories/{id}:
+    delete:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete category
+      tags:
+      - categories
+    get:
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Category'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get category by ID
+      tags:
+      - categories
+  /protected/dashboards:
+    get:
+      parameters:
+      - description: From date (YYYY-MM-DD)
+        in: query
+        name: from
+        required: true
+        type: string
+      - description: To date (YYYY-MM-DD)
+        in: query
+        name: to
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Dashboard'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get dashboard analytics
+      tags:
+      - dashboard
+  /protected/goals:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Goal'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get all goals
+      tags:
+      - goals
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create goal
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CreateGoalRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Goal'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create goal
+      tags:
+      - goals
+  /protected/goals/{id}:
+    delete:
+      parameters:
+      - description: Goal ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete goal
+      tags:
+      - goals
+    get:
+      parameters:
+      - description: Goal ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Goal'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get goal by ID
+      tags:
+      - goals
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Goal ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update goal
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdateGoalRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update goal
+      tags:
+      - goals
+  /protected/reports:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Report'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get all reports
+      tags:
+      - reports
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Generate report
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.GenerateReportRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Report'
+      security:
+      - BearerAuth: []
+      summary: Generate report
+      tags:
+      - reports
+  /protected/reports/{id}/download:
+    get:
+      parameters:
+      - description: Report ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: file
+      security:
+      - BearerAuth: []
+      summary: Download report file
+      tags:
+      - reports
+  /protected/transactions:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domain.Transaction'
+            type: array
+      security:
+      - BearerAuth: []
+      summary: Get all transactions
+      tags:
+      - transactions
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Create transaction
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.CreateTransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/domain.Transaction'
+      security:
+      - BearerAuth: []
+      summary: Create transaction
+      tags:
+      - transactions
+  /protected/transactions/{id}:
+    delete:
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete transaction
+      tags:
+      - transactions
+    get:
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domain.Transaction'
+      security:
+      - BearerAuth: []
+      summary: Get transaction by ID
+      tags:
+      - transactions
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Transaction ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Update transaction
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/domain.UpdateTransactionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update transaction
+      tags:
+      - transactions
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -1,0 +1,183 @@
+.dashboard-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px; /* Мягкие отступы */
+    box-sizing: border-box;
+}
+
+.dashboard-title-zone {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.dashboard-title-zone h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Панель фильтрации дат (Сделана резиновой) */
+.date-filter-panel {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #1e293b;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    max-width: 100%; /* Защита от вылетания */
+    box-sizing: border-box;
+}
+
+.date-filter-panel input {
+    background: #0f172a;
+    border: 1px solid #334155;
+    color: #f8fafc;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 13px;
+    width: 110px; /* Фиксируем ширину инпута, чтобы дата ("2026-05-01") идеально влезала */
+}
+
+/* Сетка карточек с балансом */
+.metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* 1 колонка на мобилках */
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+    .metrics-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 колонки на планшетах и ПК */
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+}
+
+.metric-card {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 16px; /* Компактные отступы для мобилок */
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .metric-card {
+        padding: 24px;
+        gap: 16px;
+    }
+}
+
+.metric-icon-box {
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0; /* Иконка не сожмется, если цифры будут большими */
+}
+
+@media (min-width: 768px) {
+    .metric-icon-box {
+        padding: 12px;
+    }
+}
+
+.metric-card.balance .metric-icon-box { background-color: rgba(99, 102, 241, 0.1); color: #6366f1; }
+.metric-card.income .metric-icon-box { background-color: rgba(16, 185, 129, 0.1); color: #10b981; }
+.metric-card.expense .metric-icon-box { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; }
+
+.metric-info p {
+    margin: 0 0 4px 0;
+    font-size: 11px;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+@media (min-width: 768px) {
+    .metric-info p {
+        font-size: 13px;
+    }
+}
+
+.metric-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f8fafc;
+    white-space: nowrap; /* Чтобы рубли не перепрыгивали на новую строчку криво */
+}
+
+@media (min-width: 768px) {
+    .metric-value {
+        font-size: 22px;
+    }
+}
+
+/* Виджеты нижнего уровня */
+.dashboard-details-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 992px) {
+    .dashboard-details-grid {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+.chart-placeholder-card {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 24px;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Блок распределения по категориям */
+.category-stats-block {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+/* Оставляем без изменений, так как флексы там дефолтно резиновые */
+.category-stats-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; color: #f8fafc; }
+.category-rows { display: flex; flex-direction: column; gap: 14px; }
+.category-stat-row { display: flex; flex-direction: column; gap: 6px; }
+.category-stat-info { display: flex; justify-content: space-between; font-size: 14px; }
+.cat-name { color: #cbd5e1; }
+.cat-total { font-weight: 600; }
+.progress-bar-bg { background-color: #0f172a; height: 6px; border-radius: 4px; overflow: hidden; }
+.progress-bar-fill { height: 100%; border-radius: 4px; transition: width 0.3s ease; }
+.progress-bar-fill.expense { background-color: #f87171; }
+.progress-bar-fill.income { background-color: #34d399; }
+
+/* Дополнительный глобальный фикс для мобильной зоны заголовков */
+@media (max-width: 576px) {
+    .dashboard-title-zone {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .date-filter-panel {
+        width: 100%; /* На совсем маленьких экранах панель дат растянется на всю ширину */
+        justify-content: center;
+    }
+}

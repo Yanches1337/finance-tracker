@@ -1,0 +1,157 @@
+.operations-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .operations-container {
+        grid-template-columns: 400px 1fr; /* На десктопе форма слева, список справа */
+    }
+}
+
+.op-card {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.op-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #f8fafc;
+}
+
+/* Переключатель типа транзакции */
+.type-selector {
+    display: flex;
+    background-color: #0f172a;
+    padding: 4px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.type-btn {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: none;
+    color: #94a3b8;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.type-btn.active.expense {
+    background-color: #ef4444;
+    color: #ffffff;
+}
+
+.type-btn.active.income {
+    background-color: #10b981;
+    color: #ffffff;
+}
+
+/* Стилизация полей формы */
+.form-field {
+    margin-bottom: 16px;
+}
+
+.form-field label {
+    display: block;
+    font-size: 13px;
+    color: #94a3b8;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #f8fafc;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+}
+
+.form-field input.error-border {
+    border-color: #ef4444;
+}
+
+/* Список транзакций */
+.transactions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.tx-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0f172a;
+    padding: 14px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #64748b;
+}
+
+.tx-item.expense {
+    border-left-color: #ef4444;
+}
+
+.tx-item.income {
+    border-left-color: #10b981;
+}
+
+.tx-info h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: #f8fafc;
+}
+
+.tx-info p {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+}
+
+.tx-amount {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.tx-amount.expense {
+    color: #fca5a5;
+}
+
+.tx-amount.income {
+    color: #a7f3d0;
+}
+
+.no-data {
+    text-align: center;
+    color: #64748b;
+    padding: 40px 0;
+    font-size: 14px;
+}

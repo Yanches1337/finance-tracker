@@ -1,0 +1,185 @@
+.layout-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #0f172a; /* Темный фон из ТЗ */
+    color: #f8fafc;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* --- ДЕСКТОПНЫЙ SIDEBAR --- */
+.sidebar {
+    width: 260px;
+    background-color: #1e293b;
+    border-right: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 24px 16px;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.sidebar-brand {
+    font-size: 20px;
+    font-weight: 700;
+    color: #6366f1;
+    padding: 0 12px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-grow: 1;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    color: #94a3b8;
+    border-radius: 8px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    width: 100%;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: left;
+    transition: all 0.2s ease;
+}
+
+.menu-item:hover {
+    background-color: #334155;
+    color: #f8fafc;
+}
+
+.menu-item.active {
+    background-color: #4f46e5;
+    color: #ffffff;
+}
+
+.sidebar-footer {
+    border-top: 1px solid #334155;
+    padding-top: 16px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding: 0 12px;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+/* --- ОСНОВНОЙ КОНТЕНТ --- */
+.main-content {
+    flex-grow: 1;
+    margin-left: 260px; /* Отступ равен ширине сайдбара */
+    padding: 40px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+/* --- МОБИЛЬНАЯ НАВИГАЦИЯ (По умолчанию скрыта) --- */
+.mobile-nav {
+    display: none;
+}
+
+.mobile-header {
+    display: none;
+}
+
+/* --- АДАПТИВНОСТЬ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ (Менее 768px) --- */
+@media (max-width: 768px) {
+    .sidebar {
+        display: none; /* Полностью прячем десктопный сайдбар */
+    }
+
+    .main-content {
+        margin-left: 0; /* Убираем левый отступ */
+        padding: 20px;
+        padding-top: 80px; /* Место под шапку */
+        padding-bottom: 90px; /* Место под нижнее меню */
+    }
+
+    /* Верхняя мобильная шапка с именем и кнопкой выхода */
+    .mobile-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 60px;
+        background-color: #1e293b;
+        border-bottom: 1px solid #334155;
+        padding: 0 20px;
+        z-index: 99;
+    }
+
+    .mobile-brand {
+        font-size: 18px;
+        font-weight: 700;
+        color: #6366f1;
+    }
+
+    .logout-btn-mobile {
+        background: none;
+        border: none;
+        color: #94a3b8;
+        cursor: pointer;
+    }
+
+    /* Нижняя панель навигации (Tab Bar) */
+    .mobile-nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 68px;
+        background-color: #1e293b;
+        border-top: 1px solid #334155;
+        padding-bottom: env(safe-area-inset-bottom); /* Поддержка челок на iOS */
+        z-index: 99;
+    }
+
+    .mobile-menu-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        background: none;
+        border: none;
+        color: #94a3b8;
+        font-size: 11px;
+        font-weight: 500;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .mobile-menu-item.active {
+        color: #818cf8;
+    }
+}
