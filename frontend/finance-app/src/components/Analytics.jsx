@@ -6,8 +6,12 @@ import './Analytics.css';
 
 export const Analytics = () => {
     // Даты для фильтрации (соответствуют Query-параметрам бэкенда)
-    const [fromDate, setFromDate] = useState('2026-05-01');
-    const [toDate, setToDate] = useState('2026-05-24');
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    const [fromDate, setFromDate] = useState(`${yyyy}-${mm}-01`);
+    const [toDate, setToDate] = useState(`${yyyy}-${mm}-${dd}`);
     const [loading, setLoading] = useState(false);
 
     // Сюда будем сохранять реальный ответ от Go-бэкенда
